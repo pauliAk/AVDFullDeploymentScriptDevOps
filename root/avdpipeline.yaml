@@ -9,9 +9,9 @@ variables:
 
 steps:
 
--task: AzureCLI@2
+- task: AzureCLI@2
   inputs:
-    azureSubscription: 'AkManagedIdentity'
+    #azureSubscription: 'AkManagedIdentity'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
@@ -33,9 +33,9 @@ steps:
       terraform init .
       echo "Running terraform plan..."
       terraform plan main.tf
+      terraform apply -auto-approve
 
-  
   displayName: 'Install and Run terraform'
   env:
     TF_VAR_winrm_password: $(WINRM_PASSWORD)
-    TF_VAR_winrm_password: $(DOMAIN_PASSWORD)
+    TF_VAR_domain_password: $(DOMAIN_PASSWORD)
