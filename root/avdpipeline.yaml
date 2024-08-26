@@ -1,0 +1,41 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+ - group: packer-terraform-image-build-variables
+
+steps:
+
+-task: AzureCLI@2
+  inputs:
+    azureSubscription: 'AkManagedIdentity'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+
+      az login --identity
+      echo "ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)"
+      echo "ARM_TENANT_ID: $(ARM_TENANT_ID)"
+      echo "ARM_CLIENT_ID: $(ARM_CLIENT_ID)"
+      echo "ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)"
+        
+      echo "Installing terraform ..."
+      sudo apt-get update -y
+      sudo apt-get install -y terraform
+
+      echo "terraform version:"
+      terraform version
+
+      echo "Running terraform init..."
+      terraform init .
+      echo "Running terraform plan..."
+      terraform plan main.tf
+
+  
+  displayName: 'Install and Run terraform'
+  env:
+    TF_VAR_winrm_password: $(WINRM_PASSWORD)
+    TF_VAR_winrm_password: $(DOMAIN_PASSWORD)

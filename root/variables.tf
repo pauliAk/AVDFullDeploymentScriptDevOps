@@ -46,7 +46,7 @@ variable "local_admin_username" {
 
 variable "local_admin_password" {
   type        = string
- # default     = "ChangeMe123!"
+  #default     = "ChangeMe123!"
   description = "local admin password"
   sensitive   = true
 }
