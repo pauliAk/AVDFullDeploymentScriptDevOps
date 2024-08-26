@@ -1,13 +1,3 @@
-/* terraform {
-  required_providers {
-    random = {
-      source = "hashicorp/random"
-      version = "3.6.0"
-    }
-  }
-}
- */
-
  terraform {
   required_providers {
     azurerm = {
@@ -26,20 +16,8 @@
 
 }
 
-/* provider "azurerm" {
-  features {}
-  subscription_id = "761cc7e6-a477-494a-99ef-a5d6aa0fde41"
-  client_id = "13....96a0f"
-  client_secret = "...Lp"
-  tenant_id = "f6b9b1fa-10dd-4c5b-8b1b-404934b17313"
-
-}
- */
-
-
 /* data "external" "set-sub" {
   program = ["bash", "-c","az account set --name '761cc7e6-a477-494a-99ef-a5d6aa0fde41' -o json "]
-
 } 
  */
 /*  data "external" "client_secret" {
@@ -50,7 +28,6 @@ data "external" "client_id" {
 program = ["bash", "-c", "az keyvault secret show --vault-name 'kunkeyvault' --name 'client-id' --query '{value: value}' -o json"]
 } */
  
-
 provider "azurerm" {
   features {}
  /*  subscription_id = var.subscription_id
@@ -60,7 +37,6 @@ provider "azurerm" {
   client_secret = data.external.client_secret.result["value"]
   tenant_id = var.tenant_id */
   use_msi = true
-
 }
 
 /* data "azurerm_key_vault" "keyvault" {
@@ -71,7 +47,6 @@ provider "azurerm" {
 output "vault_uri" {
   value = data.azurerm_key_vault.keyvault.vault_uri
 }
-
 
 data "azurerm_key_vault_secret" "client_secret" {
   name         = var.client-secret
@@ -94,82 +69,12 @@ output "client_id_value" {
 }
  */
 
-##################
-
- 
-/* variable "client_id" {
-  type    = string
-   default = env("ARM_CLIENT_ID")
-}
-
-variable "client_secret" {
-  type    = string
-  default = env("ARM_CLIENT_SECRET")
-}
-
-variable "subscription_id" {
-  type    = string
-    default = env("ARM_SUBSCRIPTION_ID")
-}
-
-variable "tenant_id" {
-  type    = string
- default = env("ARM_TENANT_ID")
-} */
-
-#########################
-
-#/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mygroup1/providers/Microsoft.Compute/galleries/gallery1/images/image1/versions/1.2.3
-
- /* import {
- to =  azurerm_shared_image_version.kun
- id = "/subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourceGroups/kun/providers/Microsoft.Compute/galleries/acgAk/images/acgIMageDef2/versions/1.0.1"
- } */
-
-/* data "azurerm_image" "kun" {
-  name                = "1.0.1"
-  resource_group_name = "kun"
-}
-
-data "azurerm_shared_image" "kun" {
-  name                = "acgIMageDef2"
-  gallery_name        = "acgAk"
-  resource_group_name = "kun"
-}
- */
-
 data "azurerm_shared_image_version" "kun" {
   name                = "1.0.4"
   image_name          = "acgImageDef2"
   gallery_name        = "acgAk"
   resource_group_name = "kun"
-
 } 
-
-/* resource "azurerm_shared_image_version" "kun" {
-  exclude_from_latest = false
-  gallery_name        = data.azurerm_shared_image.kun.gallery_name
-  image_name          = data.azurerm_shared_image.kun.name
-  location            = data.azurerm_shared_image.kun.location
-  # managed_image_id    = "/subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourceGroups/kun/providers/Microsoft.Compute/virtualMachines/fresh-0"
-  managed_image_id =  data.azurerm_image.kun.id
-  name                = "1.0.1"
-  os_disk_snapshot_id = null
-  resource_group_name = data.azurerm_shared_image.kun.resource_group_name
-  tags                = {}
-  target_region {
-    name                   = "westeurope"
-    regional_replica_count = 1
-    storage_account_type   = "Standard_LRS"
-  }
-  timeouts {
-    create = null
-    delete = null
-    read   = null
-    update = null
-  }
-}
- */
 
 module avdmgmt {
 source = "C:/Users/akiny/Documents/Avdterraformtestenv/desktop"
@@ -178,29 +83,11 @@ rg_name = "FeenixRG"
 
 }
 
-/* locals {
-  registration_token = azurerm_virtual_desktop_host_pool_registration_info.registrationinfo.token
-}
- */
-
 locals {
   registration_token = module.avdmgmt.regtoken.token
 }
 
-# resource "azurerm_resource_group" "kun" {
-#   name = "kun"
-#   location = "west europe"
-# }
 
-
-#import azurerm_resource_group.kun /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourceGroups/kun
-
-
-/* import {
-to =  module.imagegallery.gallery_resourcegroup.this[0]
-id = "/subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourceGroups/kun"
-}
- */
 resource "random_string" "AVD_local_password" {
   count            = var.rdsh_count
   length           = 16
@@ -209,23 +96,6 @@ resource "random_string" "AVD_local_password" {
   override_special = "*!@#?"
 }
 
-/* resource "azurerm_resource_group" "rg" {
-  name     = var.rg
-  location = var.resource_group_location
-}
- */
-
- #######################
-/* module avdvnetAk {
-source = "./networkSettings"
-prefix = var.prefix
-rg_name = var.rg
-deploy_location = var.resource_group_location
-# resource_group_location = var.resource_group_location
-
-# rg_shared_name = var.rg
-} */
-###############################
 module avdvnetAk {
 source = "C:/Users/akiny/Documents/Avdterraformtestenv/networkSettings"
 
@@ -237,19 +107,6 @@ deploy_location = "west europe"
 
 # rg_shared_name = var.rg
 }
-
-
-# module imagegallery {
-# source = "C:/Users/akiny/Documents/Aterraform/avd/azureComputeGallery"
-
-# }
-# data "azurerm_shared_image" "image"{
-# name = module.imagegallery.image_name
-# resource_group_name = module.imagegallery.gallery_resourcegroup
-# gallery_name = module.imagegallery.Compute_Gallery
-
-# depends_on = [ module.imagegallery ]
-# }
 
 
 resource "azurerm_network_interface" "avd_vm_nic" {

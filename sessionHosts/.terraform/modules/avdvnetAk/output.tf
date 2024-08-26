@@ -28,25 +28,10 @@ output "vnetname" {
   value = data.azurerm_virtual_network.example.name
 }
 
-/* output "subnetak"{
-description = "subnet of session hosts"
-value =  azurerm_subnet.subnet.id
-}
- */
+
 
  output "subnet_id" {
   description = "subnet of session hosts"
   value = data.azurerm_subnet.example.id
 }
 
-
-
-/* output "peering1" {
-  description = "ak peering from advnet to avdvnet"
-  value = azurerm_virtual_network_peering.peer1
-}
-
-output "peering2"{
-description = "ak peering from avdvnet to advnet"
-value =  azurerm_virtual_network_peering.peer2
-} */

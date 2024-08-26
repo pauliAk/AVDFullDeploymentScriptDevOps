@@ -1,13 +1,3 @@
-/* variable "resource_group_location" {
-  default = "west europe"
-  description = "Location of the resource group."
-} */
-/* 
-variable "rg" {
-  type        = string
-  default = "rg-avd-compute"
-   description = "Name of the Resource group in which to deploy session host"
-} */
 
 variable "rdsh_count" {
   description = "Number of AVD machines to deploy"
@@ -34,7 +24,7 @@ variable "domain_user_upn" {
 
 variable "domain_password" {
   type        = string
-  default     = "Valent12345."
+  #default     = "Valent12345."
   description = "Password of the user to authenticate with the domain"
   sensitive   = true
 }
@@ -56,15 +46,12 @@ variable "local_admin_username" {
 
 variable "local_admin_password" {
   type        = string
-  default     = "ChangeMe123!"
+ # default     = "ChangeMe123!"
   description = "local admin password"
   sensitive   = true
 }
 
-# variable "existingrg" {
-#   type = string
-#   description = "existing Rg which contains the image gallery"
-# }
+
  
 variable "client-id" {
   type    = string
