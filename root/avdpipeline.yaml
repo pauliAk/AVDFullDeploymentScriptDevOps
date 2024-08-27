@@ -12,7 +12,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'AkManagedIdentity'
-    scriptType: 'bash'
+    scriptType: 'powershell'
     scriptLocation: 'inlineScript'
     inlineScript: |
       echo "Logging in using Managed Identity..."
