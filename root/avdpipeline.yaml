@@ -12,7 +12,7 @@ steps:
 - task: AzureCLI@2
   inputs:
     azureSubscription: 'AkManagedIdentity'
-    scriptType: 'powershell'
+    scriptType: 'powershell@2'
     scriptLocation: 'inlineScript'
     inlineScript: |
       try {
