@@ -20,23 +20,24 @@ data "external" "set-sub" {
   program = ["bash", "-c","az account set --name '761cc7e6-a477-494a-99ef-a5d6aa0fde41' -o json "]
 } 
  */
-  data "external" "client_secret" {
+
+/*  data "external" "client_secret" {
 program = ["bash", "-c", "az keyvault secret show --vault-name 'kunkeyvault' --name 'client-secret' --query '{value: value}' -o json"]
 }
 
 data "external" "client_id" {
 program = ["bash", "-c", "az keyvault secret show --vault-name 'kunkeyvault' --name 'client-id' --query '{value: value}' -o json"]
-} 
+} */
  
 provider "azurerm" {
   features {}
-   subscription_id = var.subscription_id
-  #client_id = data.azurerm_key_vault_secret.client_id.value
+  subscription_id = var.subscription_id
+ /*  #client_id = data.azurerm_key_vault_secret.client_id.value
   client_id = data.external.client_id.result["value"]
   #client_secret = data.azurerm_key_vault_secret.client_secret.value
-  client_secret = data.external.client_secret.result["value"]
-  tenant_id = var.tenant_id 
-  #use_msi = true
+  client_secret = data.external.client_secret.result["value"] */
+  tenant_id = var.tenant_id  
+  use_msi = true
 }
 
 /* data "azurerm_key_vault" "keyvault" {
