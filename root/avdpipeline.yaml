@@ -15,27 +15,31 @@ steps:
     scriptType: 'powershell'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      echo "Logging in using Managed Identity..."
-      az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
+      try {
+        Write-Output "Logging in using Managed Identity..."
+        az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
 
-      echo "Showing account details..."
-      az account show
+        Write-Output "Showing account details..."
+        az account show
 
-      echo "ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)"
-      echo "ARM_TENANT_ID: $(ARM_TENANT_ID)"
-      
-      echo "Terraform version:"
-      terraform version
+        Write-Output "ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)"
+        Write-Output "ARM_TENANT_ID: $(ARM_TENANT_ID)"
+        
+        Write-Output "Terraform version:"
+        terraform version
 
-      echo "Running terraform init..."
-      terraform init
+        Write-Output "Running terraform init..."
+        terraform init
 
-      echo "Running terraform plan..."
-      terraform plan
+        Write-Output "Running terraform plan..."
+        terraform plan
 
-      echo "Applying terraform..."
-      terraform apply -auto-approve
-
+        Write-Output "Applying terraform..."
+        terraform apply -auto-approve
+      } catch {
+        Write-Output "An error occurred: $_"
+        exit 1
+      }
   displayName: 'Install and Run terraform'
   env:
     TF_VAR_winrm_password: $(WINRM_PASSWORD)
