@@ -2,7 +2,7 @@ trigger:
 - none
 
 pool:
-  name: mypool
+  name: default
 
 variables:
  - group: packer-terraform-image-build-variables
