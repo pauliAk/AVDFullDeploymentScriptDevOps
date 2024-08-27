@@ -16,7 +16,7 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       echo "Logging in using Managed Identity..."
-      az login --identity
+      az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
 
       echo "Showing account details..."
       az account show
