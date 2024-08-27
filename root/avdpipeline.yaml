@@ -13,17 +13,20 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
 
-      echo "Installing terraform ..."
+      echo "Installing Terraform..."
       sudo apt-get update -y
       sudo apt-get install -y terraform
 
-      echo "terraform version:"
+      echo "Terraform version:"
       terraform version
 
       echo "Running terraform init..."
-      terraform init .
+      terraform init
+
       echo "Running terraform plan..."
-      terraform plan main.tf
+      terraform plan
+
+      echo "Applying terraform..."
       terraform apply -auto-approve
 
   displayName: 'Install and Run terraform'
