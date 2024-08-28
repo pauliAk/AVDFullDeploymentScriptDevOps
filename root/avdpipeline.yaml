@@ -50,54 +50,54 @@ stages:
         PKR_VAR_resource_group_name: $(RESOURCE_GROUP_NAME)
         PKR_VAR_storageAccountKey: $(STORAGE_ACCOUNT_KEY
 
-  - stage: DeployStage
+- stage: DeployStage
 
-    displayName: 'Deploy Stage'
-    dependsOn: BuildStage
+  displayName: 'Deploy Stage'
+  dependsOn: BuildStage
 
-    jobs:
-    - job: Deploy
-      displayName: 'Deploy using self-hosted agent'
-      pool:
-        name: 'Default'  # Specify the self-hosted agent pool
-        demands:
-          - agent.name -equals LABVM  # Optional: specify a particular self-hosted agent
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy using self-hosted agent'
+    pool:
+      name: 'Default'  # Specify the self-hosted agent pool
+      demands:
+        - agent.name -equals LABVM  # Optional: specify a particular self-hosted agent
 
-      variables:
-      - group: packer-terraform-image-build-variables
+    variables:
+    - group: packer-terraform-image-build-variables
 
-      steps:
-      - checkout: self
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'   # This indicates the script is provided directly in the YAML file
-          script: |
-              # Navigate to the directory where your Terraform files are located
-              Set-Location "$(Build.SourcesDirectory)/root"
+    steps:
+    - checkout: self
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'   # This indicates the script is provided directly in the YAML file
+        script: |
+            # Navigate to the directory where your Terraform files are located
+            Set-Location "$(Build.SourcesDirectory)/root"
 
-      
-              Write-Output "Logging in using Managed Identity..."
-              az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
+    
+            Write-Output "Logging in using Managed Identity..."
+            az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
 
-              Write-Output "Showing account details..."
-              az account show
+            Write-Output "Showing account details..."
+            az account show
 
-              Write-Output "Terraform version:"
-              terraform version
+            Write-Output "Terraform version:"
+            terraform version
 
-              Write-Output "Running terraform init..."
-              terraform init
+            Write-Output "Running terraform init..."
+            terraform init
 
-              Write-Output "Running terraform plan..."
-              terraform plan
+            Write-Output "Running terraform plan..."
+            terraform plan
 
-              Write-Output "Applying terraform..."
-              terraform apply -auto-approve
-          
-          
-        displayName: 'Install and Run terraform'
-        env:
-          TF_VAR_winrm_password: $(WINRM_PASSWORD)
-          TF_VAR_domain_password: $(DOMAIN_PASSWORD)
-          TF_VAR_local_admin_password: $(LOCAL_ADMIN_PASSWORD)
-          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+            Write-Output "Applying terraform..."
+            terraform apply -auto-approve
+        
+        
+      displayName: 'Install and Run terraform'
+      env:
+        TF_VAR_winrm_password: $(WINRM_PASSWORD)
+        TF_VAR_domain_password: $(DOMAIN_PASSWORD)
+        TF_VAR_local_admin_password: $(LOCAL_ADMIN_PASSWORD)
+        ARM_CLIENT_ID: $(ARM_CLIENT_ID)
