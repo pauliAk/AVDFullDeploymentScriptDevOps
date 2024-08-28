@@ -11,10 +11,8 @@ steps:
 
 - task: PowerShell@2
   inputs:
-    azureSubscription: 'AkManagedIdentity'
-    scriptType: 'powershell'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
+    targetType: 'inline'   # This indicates the script is provided directly in the YAML file
+    script: |
         # Navigate to the directory where your Terraform files are located
         Set-Location "$(Build.SourcesDirectory)/root"
 
