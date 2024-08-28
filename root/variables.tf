@@ -24,8 +24,7 @@ variable "domain_user_upn" {
 
 variable "domain_password" {
   type        = string
-  #default     = "Valent12345."
-  description = "Password of the user to authenticate with the domain"
+   description = "Password of the user to authenticate with the domain"
   sensitive   = true
 }
 
@@ -46,11 +45,9 @@ variable "local_admin_username" {
 
 variable "local_admin_password" {
   type        = string
-  #default     = "ChangeMe123!"
-  description = "local admin password"
+   description = "local admin password"
   sensitive   = true
 }
-
 
  
 variable "client-id" {
@@ -74,9 +71,7 @@ variable "tenant_id" {
  default = "f6b9b1fa-10dd-4c5b-8b1b-404934b17313"
 }
 
-
 variable "keyvaultname" {
-
   type = string
   default = "kunkeyvault"
   
