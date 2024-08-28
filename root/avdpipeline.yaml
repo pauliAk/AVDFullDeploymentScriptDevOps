@@ -46,6 +46,7 @@ stages:
         PKR_VAR_gallery_image_name: $(GALLERY_IMAGE_NAME)
         PKR_VAR_resource_group_name: $(RESOURCE_GROUP_NAME)
         PKR_VAR_storageAccountKey: $(STORAGE_ACCOUNT_KEY)
+        PKR_VAR_winrm_password: $(WINRM_PASSWORD)
 
 - stage: DeployStage
   displayName: 'Deploy Stage'
