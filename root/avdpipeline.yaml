@@ -1,6 +1,11 @@
 trigger:
 - none
 
+resources:
+  repositories:
+    - repository: Packer
+      type: git
+      name: TerraformAk/Packer
 
 stages:
 - stage: BuildStage
@@ -8,19 +13,13 @@ stages:
   jobs:
   - job: Build
     displayName: 'Build using Microsoft-hosted agent'
-
     pool:
       vmImage: ubuntu-latest
-
     variables:
     - group: packer-terraform-image-build-variables
-
     steps:
-    - checkout: 
-        repository: Packer
-        path: Packer
+    - checkout: Packer
       displayName: 'Checkout Repository for Build'
-
     - script: |
         echo "ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)"
         echo "ARM_TENANT_ID: $(ARM_TENANT_ID)"
@@ -38,7 +37,6 @@ stages:
         packer init .
         echo "Running packer build..."
         packer build azureimage.pkr.hcl
-
       displayName: 'Install and Run Packer'
       env:
         PKR_VAR_subscription_id: $(ARM_SUBSCRIPTION_ID)
@@ -47,13 +45,11 @@ stages:
         PKR_VAR_client_secret: $(ARM_CLIENT_SECRET)
         PKR_VAR_gallery_image_name: $(GALLERY_IMAGE_NAME)
         PKR_VAR_resource_group_name: $(RESOURCE_GROUP_NAME)
-        PKR_VAR_storageAccountKey: $(STORAGE_ACCOUNT_KEY
+        PKR_VAR_storageAccountKey: $(STORAGE_ACCOUNT_KEY)
 
 - stage: DeployStage
-
   displayName: 'Deploy Stage'
   dependsOn: BuildStage
-
   jobs:
   - job: Deploy
     displayName: 'Deploy using self-hosted agent'
@@ -61,10 +57,8 @@ stages:
       name: 'Default'  # Specify the self-hosted agent pool
       demands:
         - agent.name -equals LABVM  # Optional: specify a particular self-hosted agent
-
     variables:
     - group: packer-terraform-image-build-variables
-
     steps:
     - checkout: self
     - task: PowerShell@2
@@ -73,27 +67,18 @@ stages:
         script: |
             # Navigate to the directory where your Terraform files are located
             Set-Location "$(Build.SourcesDirectory)/root"
-
-    
             Write-Output "Logging in using Managed Identity..."
             az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
-
             Write-Output "Showing account details..."
             az account show
-
             Write-Output "Terraform version:"
             terraform version
-
             Write-Output "Running terraform init..."
             terraform init
-
             Write-Output "Running terraform plan..."
             terraform plan
-
             Write-Output "Applying terraform..."
             terraform apply -auto-approve
-        
-        
       displayName: 'Install and Run terraform'
       env:
         TF_VAR_winrm_password: $(WINRM_PASSWORD)
