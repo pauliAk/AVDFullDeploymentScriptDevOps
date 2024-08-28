@@ -17,8 +17,8 @@ stages:
 
     steps:
     - checkout: 
-        repository: Packer
-        path: Packer
+        repository: https://dev.azure.com/akinyemiakinkunle14/TerraformAk/_git/Packer
+        path: https://dev.azure.com/akinyemiakinkunle14/TerraformAk/_git/Packer
       displayName: 'Checkout Repository for Build'
 
     - script: |
