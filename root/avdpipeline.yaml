@@ -9,7 +9,7 @@ variables:
 
 steps:
 
-- task: AzureCLI@2
+- task: PowerShell@2
   inputs:
     azureSubscription: 'AkManagedIdentity'
     scriptType: 'powershell@2'
