@@ -15,6 +15,9 @@ steps:
     scriptType: 'powershell'
     scriptLocation: 'inlineScript'
     inlineScript: |
+        # Navigate to the directory where your Terraform files are located
+        Set-Location "$(Build.SourcesDirectory)/root"
+
  
         Write-Output "Logging in using Managed Identity..."
         az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
