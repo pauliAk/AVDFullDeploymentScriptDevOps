@@ -12,11 +12,16 @@ steps:
 - task: PowerShell@2
   inputs:
     azureSubscription: 'AkManagedIdentity'
-    scriptType: 'powershell@2'
+    scriptType: 'powershell'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      try {
-      
+ 
+        Write-Output "Logging in using Managed Identity..."
+        az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
+
+        Write-Output "Showing account details..."
+        az account show
+
         Write-Output "Terraform version:"
         terraform version
 
@@ -28,10 +33,8 @@ steps:
 
         Write-Output "Applying terraform..."
         terraform apply -auto-approve
-      } catch {
-        Write-Output "An error occurred: $_"
-        exit 1
-      }
+     
+     
   displayName: 'Install and Run terraform'
   env:
     TF_VAR_winrm_password: $(WINRM_PASSWORD)
