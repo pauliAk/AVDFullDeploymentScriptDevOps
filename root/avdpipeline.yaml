@@ -5,7 +5,6 @@ trigger:
 stages:
 - stage: BuildStage
   displayName: 'Build Stage'
-
   jobs:
   - job: Build
     displayName: 'Build using Microsoft-hosted agent'
