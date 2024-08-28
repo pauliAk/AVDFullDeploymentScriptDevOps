@@ -38,6 +38,7 @@ provider "azurerm" {
   client_secret = data.external.client_secret.result["value"] */
   tenant_id = var.tenant_id  
   use_msi = true
+  #msi_client_id = "b2acc262-4097-4142-94fa-037899bc833f"
 }
 
 /* data "azurerm_key_vault" "keyvault" {

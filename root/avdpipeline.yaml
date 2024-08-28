@@ -41,3 +41,4 @@ steps:
     TF_VAR_winrm_password: $(WINRM_PASSWORD)
     TF_VAR_domain_password: $(DOMAIN_PASSWORD)
     TF_VAR_local_admin_password: $(LOCAL_ADMIN_PASSWORD)
+    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
