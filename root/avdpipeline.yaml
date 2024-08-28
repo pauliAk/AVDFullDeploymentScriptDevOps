@@ -1,44 +1,103 @@
 trigger:
 - none
 
-pool:
-  name: default
 
-variables:
- - group: packer-terraform-image-build-variables
+stages:
+- stage: BuildStage
+  displayName: 'Build Stage'
 
-steps:
+  jobs:
+  - job: Build
+    displayName: 'Build using Microsoft-hosted agent'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'   # This indicates the script is provided directly in the YAML file
-    script: |
-        # Navigate to the directory where your Terraform files are located
-        Set-Location "$(Build.SourcesDirectory)/root"
+    pool:
+      vmImage: ubuntu-latest
 
- 
-        Write-Output "Logging in using Managed Identity..."
-        az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
+    variables:
+    - group: packer-terraform-image-build-variables
 
-        Write-Output "Showing account details..."
-        az account show
+    steps:
+    - checkout: 
+        repository: Packer
+        path: Packer
+      displayName: 'Checkout Repository for Build'
 
-        Write-Output "Terraform version:"
-        terraform version
+    - script: |
+        echo "ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)"
+        echo "ARM_TENANT_ID: $(ARM_TENANT_ID)"
+        echo "ARM_CLIENT_ID_SP: $(ARM_CLIENT_ID_SP)"
+        echo "ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)"
+          
+        echo "Installing Packer..."
+        sudo apt-get update -y
+        sudo apt-get install -y packer
 
-        Write-Output "Running terraform init..."
-        terraform init
+        echo "Packer version:"
+        packer version
 
-        Write-Output "Running terraform plan..."
-        terraform plan
+        echo "Running packer init..."
+        packer init .
+        echo "Running packer build..."
+        packer build azureimage.pkr.hcl
 
-        Write-Output "Applying terraform..."
-        terraform apply -auto-approve
-     
-     
-  displayName: 'Install and Run terraform'
-  env:
-    TF_VAR_winrm_password: $(WINRM_PASSWORD)
-    TF_VAR_domain_password: $(DOMAIN_PASSWORD)
-    TF_VAR_local_admin_password: $(LOCAL_ADMIN_PASSWORD)
-    ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      displayName: 'Install and Run Packer'
+      env:
+        PKR_VAR_subscription_id: $(ARM_SUBSCRIPTION_ID)
+        PKR_VAR_tenant_id: $(ARM_TENANT_ID)
+        PKR_VAR_client_id_sp: $(ARM_CLIENT_ID_SP)
+        PKR_VAR_client_secret: $(ARM_CLIENT_SECRET)
+        PKR_VAR_gallery_image_name: $(GALLERY_IMAGE_NAME)
+        PKR_VAR_resource_group_name: $(RESOURCE_GROUP_NAME)
+        PKR_VAR_storageAccountKey: $(STORAGE_ACCOUNT_KEY
+
+  - stage: DeployStage
+
+    displayName: 'Deploy Stage'
+    dependsOn: BuildStage
+
+    jobs:
+    - job: Deploy
+      displayName: 'Deploy using self-hosted agent'
+      pool:
+        name: 'Default'  # Specify the self-hosted agent pool
+        demands:
+          - agent.name -equals LABVM  # Optional: specify a particular self-hosted agent
+
+      variables:
+      - group: packer-terraform-image-build-variables
+
+      steps:
+      - checkout: self
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'   # This indicates the script is provided directly in the YAML file
+          script: |
+              # Navigate to the directory where your Terraform files are located
+              Set-Location "$(Build.SourcesDirectory)/root"
+
+      
+              Write-Output "Logging in using Managed Identity..."
+              az login --identity -u /subscriptions/761cc7e6-a477-494a-99ef-a5d6aa0fde41/resourcegroups/kun/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AkManagedIdentity
+
+              Write-Output "Showing account details..."
+              az account show
+
+              Write-Output "Terraform version:"
+              terraform version
+
+              Write-Output "Running terraform init..."
+              terraform init
+
+              Write-Output "Running terraform plan..."
+              terraform plan
+
+              Write-Output "Applying terraform..."
+              terraform apply -auto-approve
+          
+          
+        displayName: 'Install and Run terraform'
+        env:
+          TF_VAR_winrm_password: $(WINRM_PASSWORD)
+          TF_VAR_domain_password: $(DOMAIN_PASSWORD)
+          TF_VAR_local_admin_password: $(LOCAL_ADMIN_PASSWORD)
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
