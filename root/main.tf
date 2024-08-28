@@ -37,7 +37,7 @@ provider "azurerm" {
   #client_secret = data.azurerm_key_vault_secret.client_secret.value
   client_secret = data.external.client_secret.result["value"] */
   #tenant_id = var.tenant_id  
-  #use_msi = true
+  use_msi = true
 
 }
 
