@@ -73,7 +73,7 @@ output "client_id_value" {
 
 data "azurerm_shared_image_version" "kun" {
   name                = "1.0.5"
-  image_name          = "acgImageDef3"
+  image_name          = "acgImageDef4"
   gallery_name        = "acgAk"
   resource_group_name = "kun"
 } 
