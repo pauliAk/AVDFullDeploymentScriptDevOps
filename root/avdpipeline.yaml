@@ -75,12 +75,12 @@ stages:
             Write-Output "Terraform version:"
             terraform version
             Write-Output "Running terraform init..."
-            terraform init -reconfigure
+            terraform init -upgrade
             Write-Output "Running terraform plan..."
-            terraform plan
+            terraform plan -out=tfplan
             Write-Output "Applying terraform..."
-            terraform apply -auto-approve
-      displayName: 'Install and Run terraform'
+            terraform apply -auto-approve tfplan
+      displayName: 'Run Terraform with Upgrade'
       env:
         TF_VAR_winrm_password: $(WINRM_PASSWORD)
         TF_VAR_domain_password: $(DOMAIN_PASSWORD)
