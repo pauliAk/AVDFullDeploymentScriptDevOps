@@ -79,7 +79,7 @@ data "azurerm_shared_image_version" "kun" {
 } 
 
 module avdmgmt {
-source = "C:/Users/akiny/Documents/Avdterraformtestenv/root/desktop"
+source = "./desktop"
 hostpool = "FeenixHP"
 rg_name = "FeenixRG"
 
@@ -99,7 +99,7 @@ resource "random_string" "AVD_local_password" {
 }
 
 module avdvnetAk {
-source = "C:/Users/akiny/Documents/Avdterraformtestenv/root/networkSettings"
+source = "./networkSettings"
 
 #prefix = "avdtf"
 rg_name = "kun"
