@@ -75,7 +75,7 @@ stages:
             Write-Output "Terraform version:"
             terraform version
             Write-Output "Running terraform init..."
-            terraform init
+            terraform init -reconfigure
             Write-Output "Running terraform plan..."
             terraform plan
             Write-Output "Applying terraform..."
