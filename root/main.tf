@@ -17,7 +17,7 @@
 }
 /*
 data "external" "set-sub" {
-  program = ["bash", "-c","az account set --name '761cc7e6-a477-494a-99ef-a5d6aa0fde41' -o json "]
+  program = ["bash", "-c","az account set --name '761cc**************a5d6aa0fde41' -o json "]
 } 
  */
 
@@ -260,7 +260,7 @@ resource "azurerm_virtual_machine_extension" "customscriptext" {
   settings = <<SETTINGS
     {  
 
-        "fileUris" : ["https://akterraformstorage.blob.core.windows.net/sessionhostconfig/sessionHostConfig.ps1?sp=r&st=2024-08-22T13:45:15Z&se=2024-08-28T21:45:15Z&skoid=a17ff046-2132-4453-8b11-be8ba22f28e2&sktid=f6b9b1fa-10dd-4c5b-8b1b-404934b17313&skt=2024-08-22T13:45:15Z&ske=2024-08-28T21:45:15Z&sks=b&skv=2022-11-02&spr=https&sv=2022-11-02&sr=b&sig=7KX5QbR%2BwsUSV9hhj%2BygqwyjRYe4EaiDaqOmCHd30E8%3D"]
+        "fileUris" : ["https://akterraformstorage.blob.core.windows.net/sessionhostconfig/sessionHostConfig.ps1?sp=****************************************-404934b17313&skt=2024-08-22T13:45:15Z&ske=2024-08-28T21:45:15Z&sks=b&skv=2022-11-02&spr=https&sv=2022-11-02&sr=b&sig=7KX5QbR%2BwsUSV9hhj%2BygqwyjRYe4EaiDaqOmCHd30E8%3D"]
 
     }
 SETTINGS
@@ -268,7 +268,7 @@ SETTINGS
   protected_settings = <<PROTECTED_SETTINGS
      {
          "storageAccountName": "akterraformstorage",
-         "storageAccountKey": "S7CoMB6QML5Gv31lAq8JVGKMRPrMvGyO3KiWsk03zstTnRImkn3NOzedUmwZ5CWrQlpx4hT/QEFq+AStUnekxQ==",
+         "storageAccountKey": "************************************************************",
             "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -file sessionHostConfig.ps1"
      }
  PROTECTED_SETTINGS
@@ -278,7 +278,7 @@ SETTINGS
 settings = <<-SETTINGS
   { 
     
-    "script": "https://akterraformstorage.blob.core.windows.net/sessionhostconfig/sessionHostConfig.ps1?sp=r&st=2024-04-02T13:56:04Z&se=2024-04-02T21:56:04Z&spr=https&sv=2022-11-02&sr=c&sig=pQGlLe2oE3Q8znCbeg9zB9HK9j50yfmWyxELnCQaAG4%3D"
+    "script": "https://akterraformstorage.blob.core.windows.net/sessionhostconfig/sessionHostConfig.ps1?****************************************************ig=pQGlLe2oE3Q8znCbeg9zB9HK9j50yfmWyxELnCQaAG4%3D"
     "commandToExecute" : "powershell.exe -ExecutionPolicy Unrestricted -File sessionHostConfig.ps1"
 
 }
